@@ -97,16 +97,17 @@ export async function getSettings(): Promise<SiteSettings> {
     };
   }
 
+  const d = data as Record<string, unknown>;
   return {
-    siteName: data.site_name || 'MaxPlus',
-    whatsappNumber: data.whatsapp_number || '',
-    whatsappMessage: data.whatsapp_message || "Hello, I'm interested in MaxPlus",
-    adminPassword: data.admin_password || 'maxplus2024',
-    stripeKey: data.stripe_key || '',
-    squareKey: data.square_key || '',
-    paypalKey: data.paypal_key || '',
-    activePayment: data.active_payment || 'whatsapp',
-    currency: data.currency || 'USD',
+    siteName: (d.site_name as string) || 'MaxPlus',
+    whatsappNumber: (d.whatsapp_number as string) || '',
+    whatsappMessage: (d.whatsapp_message as string) || "Hello, I'm interested in MaxPlus",
+    adminPassword: (d.admin_password as string) || 'maxplus2024',
+    stripeKey: (d.stripe_key as string) || '',
+    squareKey: (d.square_key as string) || '',
+    paypalKey: (d.paypal_key as string) || '',
+    activePayment: (d.active_payment as string) || 'whatsapp',
+    currency: (d.currency as string) || 'USD',
   };
 }
 
@@ -124,12 +125,10 @@ export async function updateSettings(settings: Partial<SiteSettings>): Promise<S
   if (settings.activePayment !== undefined) dbData.active_payment = settings.activePayment;
   if (settings.currency !== undefined) dbData.currency = settings.currency;
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('mp_settings')
     .update(dbData)
-    .eq('id', 1)
-    .select()
-    .single();
+    .eq('id', 1);
 
   if (error) throw error;
   return getSettings();
@@ -189,24 +188,25 @@ export async function createOrder(order: {
       status: 'pending',
       payment_method: order.paymentMethod,
       notes: order.notes || '',
-    })
+    } as Record<string, unknown>)
     .select()
     .single();
 
   if (error) throw error;
 
+  const d = data as Record<string, unknown>;
   return {
-    id: data.id,
-    orderNumber: data.order_number,
-    customerName: data.customer_name,
-    customerEmail: data.customer_email,
-    customerPhone: data.customer_phone,
-    shippingAddress: data.shipping_address,
-    items: data.items,
-    totalAmount: Number(data.total_amount),
-    currency: data.currency,
-    status: data.status,
-    paymentMethod: data.payment_method,
+    id: d.id as string,
+    orderNumber: d.order_number as string,
+    customerName: d.customer_name as string,
+    customerEmail: d.customer_email as string,
+    customerPhone: d.customer_phone as string,
+    shippingAddress: d.shipping_address as string,
+    items: d.items as Array<{ productId: string; name: string; quantity: number; price: number }>,
+    totalAmount: Number(d.total_amount),
+    currency: d.currency as string,
+    status: d.status as string,
+    paymentMethod: d.payment_method as string,
     paymentId: data.payment_id,
     notes: data.notes,
     createdAt: data.created_at,

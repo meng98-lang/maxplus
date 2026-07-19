@@ -1,12 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 
-let _supabase: ReturnType<typeof createClient> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _supabase: any = null;
 
-export function getSupabase() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getSupabase(): any {
   if (_supabase) return _supabase;
 
-  const url = process.env.COZE_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const key = process.env.COZE_SUPABASE_SECRET_KEY || 'placeholder-key';
+  const url = process.env.COZE_SUPABASE_URL || '';
+  const key = process.env.COZE_SUPABASE_SECRET_KEY || '';
 
   _supabase = createClient(url, key);
   return _supabase;
