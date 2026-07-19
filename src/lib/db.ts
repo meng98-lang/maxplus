@@ -86,7 +86,7 @@ export type TrafficStats = { totalVisits: number; todayVisits: number; byCountry
 export async function getSettings(): Promise<SiteSettings> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('mp_settings')
+    .from('maxplus_settings')
     .select('*')
     .eq('id', 1)
     .single();
@@ -134,7 +134,7 @@ export async function updateSettings(settings: Partial<SiteSettings>): Promise<S
   if (settings.currency !== undefined) dbData.currency = settings.currency;
 
   const { error } = await supabase
-    .from('mp_settings')
+    .from('maxplus_settings')
     .update(dbData)
     .eq('id', 1);
 
@@ -146,37 +146,43 @@ export async function updateSettings(settings: Partial<SiteSettings>): Promise<S
 export async function getProducts(): Promise<Product[]> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('mp_products')
+    .from('maxplus_products')
     .select('*')
     .eq('enabled', true)
     .order('sort_order', { ascending: true });
 
   if (error) return [];
 
-  return (data || []).map((p: Record<string, unknown>) => ({
-    id: p.id as string,
-    name: p.name as string,
-    subtitle: (p.subtitle as string) || '',
-    description: p.description as string,
-    price: Number(p.price),
-    comparePrice: Number(p.compare_price) || 0,
-    quantity: Number(p.quantity) || 1,
-    label: p.label as string,
-    badge: p.badge as string,
-    imageUrl: p.image_url as string,
-    images: p.images ? (p.images as string[]) : [p.image_url as string],
-    rating: Number(p.rating) || 4.8,
-    reviews: Number(p.reviews) || 0,
-    specs: p.specs ? (p.specs as Array<{ label: string; value: string }>) : [],
-    enabled: p.enabled as boolean,
-    sortOrder: Number(p.sort_order) || 0,
-  }));
+  return (data || []).map((p: Record<string, unknown>) => {
+    const images = p.images as string[] | null;
+    const imageUrl = images && images.length > 0 ? images[0] : (p.image_url as string) || '';
+    return {
+      id: p.id as string,
+      name: p.name as string,
+      subtitle: (p.subtitle as string) || '',
+      description: p.description as string,
+      price: Number(p.price),
+      comparePrice: Number(p.compare_price) || 0,
+      quantity: Number(p.quantity) || 1,
+      label: p.label as string,
+      badge: p.badge as string,
+      imageUrl,
+      images: images || [],
+      rating: Number(p.rating) || 4.8,
+      reviews: Number(p.reviews) || 0,
+      specs: p.specifications ? (p.specifications as Array<{ label: string; value: string }>) : [],
+      highlights: p.highlights ? (p.highlights as string[]) : [],
+      descriptionHtml: p.description_html as string,
+      enabled: p.enabled as boolean,
+      sortOrder: Number(p.sort_order) || 0,
+    };
+  });
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('mp_products')
+    .from('maxplus_products')
     .select('*')
     .eq('id', id)
     .single();
@@ -184,6 +190,8 @@ export async function getProductById(id: string): Promise<Product | null> {
   if (error || !data) return null;
 
   const p = data as Record<string, unknown>;
+  const images = p.images as string[] | null;
+  const imageUrl = images && images.length > 0 ? images[0] : (p.image_url as string) || '';
   return {
     id: p.id as string,
     name: p.name as string,
@@ -194,11 +202,13 @@ export async function getProductById(id: string): Promise<Product | null> {
     quantity: Number(p.quantity) || 1,
     label: p.label as string,
     badge: p.badge as string,
-    imageUrl: p.image_url as string,
-    images: p.images ? (p.images as string[]) : [p.image_url as string],
+    imageUrl,
+    images: images || [],
     rating: Number(p.rating) || 4.8,
     reviews: Number(p.reviews) || 0,
-    specs: p.specs ? (p.specs as Array<{ label: string; value: string }>) : [],
+    specs: p.specifications ? (p.specifications as Array<{ label: string; value: string }>) : [],
+    highlights: p.highlights ? (p.highlights as string[]) : [],
+    descriptionHtml: p.description_html as string,
     enabled: p.enabled as boolean,
     sortOrder: Number(p.sort_order) || 0,
   };
@@ -219,7 +229,7 @@ export async function createOrder(order: {
   const orderNumber = 'MP-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
 
   const { data, error } = await supabase
-    .from('mp_orders')
+    .from('maxplus_orders')
     .insert({
       order_number: orderNumber,
       customer_name: order.customerName,
@@ -260,7 +270,7 @@ export async function createOrder(order: {
 export async function getOrders(limit = 50): Promise<Order[]> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('mp_orders')
+    .from('maxplus_orders')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(limit);
@@ -288,7 +298,7 @@ export async function getOrders(limit = 50): Promise<Order[]> {
 export async function updateOrderStatus(orderId: string, status: string): Promise<void> {
   const supabase = getSupabase();
   await supabase
-    .from('mp_orders')
+    .from('maxplus_orders')
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', orderId);
 }
@@ -303,7 +313,7 @@ export async function recordCartEvent(event: {
   page?: string;
 }): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('mp_cart_events').insert({
+  await supabase.from('maxplus_cart_events').insert({
     session_id: event.sessionId,
     product_id: event.productId || null,
     quantity: event.quantity || 1,
@@ -316,7 +326,7 @@ export async function recordCartEvent(event: {
 export async function getCartStats(): Promise<{ addToCart: number; checkouts: number; purchases: number }> {
   const supabase = getSupabase();
   const { data } = await supabase
-    .from('mp_cart_events')
+    .from('maxplus_cart_events')
     .select('event_type');
 
   if (!data) return { addToCart: 0, checkouts: 0, purchases: 0 };
@@ -332,7 +342,7 @@ export async function getCartStats(): Promise<{ addToCart: number; checkouts: nu
 export async function getPixels(): Promise<Pixel[]> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('mp_pixels')
+    .from('maxplus_pixels')
     .select('*')
     .order('created_at', { ascending: true });
 
@@ -368,7 +378,7 @@ export async function upsertPixel(pixel: {
   let result;
   if (pixel.id) {
     const { data, error } = await supabase
-      .from('mp_pixels')
+      .from('maxplus_pixels')
       .update(dbData)
       .eq('id', pixel.id)
       .select()
@@ -377,7 +387,7 @@ export async function upsertPixel(pixel: {
     result = data;
   } else {
     const { data, error } = await supabase
-      .from('mp_pixels')
+      .from('maxplus_pixels')
       .insert(dbData)
       .select()
       .single();
@@ -397,7 +407,7 @@ export async function upsertPixel(pixel: {
 
 export async function deletePixel(id: string): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('mp_pixels').delete().eq('id', id);
+  await supabase.from('maxplus_pixels').delete().eq('id', id);
 }
 
 // ============ Traffic ============
@@ -411,7 +421,7 @@ export async function recordVisit(visit: {
   device?: string;
 }): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('mp_traffic').insert({
+  await supabase.from('maxplus_traffic').insert({
     session_id: visit.sessionId,
     page: visit.page || '',
     referrer: visit.referrer || '',
@@ -430,7 +440,7 @@ export async function getTrafficStats(): Promise<{
 }> {
   const supabase = getSupabase();
   const { data } = await supabase
-    .from('mp_traffic')
+    .from('maxplus_traffic')
     .select('*');
 
   if (!data) return { total: 0, today: 0, byPage: [], byCountry: [] };
@@ -466,7 +476,7 @@ export async function recordClick(click: {
   page?: string;
 }): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('mp_clicks').insert({
+  await supabase.from('maxplus_clicks').insert({
     type: click.type,
     label: click.label || '',
     ip: click.ip || '',
@@ -480,7 +490,7 @@ export async function getClickStats(): Promise<{
   byType: Array<{ type: string; count: number }>;
 }> {
   const supabase = getSupabase();
-  const { data } = await supabase.from('mp_clicks').select('*');
+  const { data } = await supabase.from('maxplus_clicks').select('*');
 
   if (!data) return { total: 0, today: 0, byType: [] };
 
