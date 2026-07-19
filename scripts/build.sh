@@ -1,7 +1,9 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-COZE_WORKSPACE_PATH="${COZE_WORKSPACE_PATH:-$(pwd)}"
+# Use the directory where this script is located as the workspace
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+COZE_WORKSPACE_PATH="${COZE_WORKSPACE_PATH:-$SCRIPT_DIR}"
 
 cd "${COZE_WORKSPACE_PATH}"
 
