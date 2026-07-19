@@ -79,6 +79,9 @@ export interface ClickRecord {
   createdAt: string;
 }
 
+export type Click = ClickRecord;
+export type TrafficStats = { totalVisits: number; todayVisits: number; byCountry: Array<{ country: string; count: number }> };
+
 // ============ Settings ============
 export async function getSettings(): Promise<SiteSettings> {
   const supabase = getSupabase();
@@ -498,3 +501,4 @@ export async function getClickStats(): Promise<{
     byType: Array.from(typeMap.entries()).map(([type, count]) => ({ type, count })),
   };
 }
+

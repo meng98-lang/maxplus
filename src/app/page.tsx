@@ -17,7 +17,7 @@ export default async function Home() {
 
   return (
     <>
-      <TrackingScripts pixels={pixels} />
+      <TrackingScripts />
 
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
@@ -147,7 +147,7 @@ export default async function Home() {
         </div>
       </footer>
 
-      <WhatsAppFloat whatsappNumber={whatsappNumber} message={settings.whatsappMessage} />
+      <WhatsAppFloat />
     </>
   );
 }
