@@ -16,6 +16,7 @@ export interface SiteSettings {
 export interface Product {
   id: string;
   name: string;
+  subtitle: string;
   description: string;
   price: number;
   comparePrice: number;
@@ -23,6 +24,10 @@ export interface Product {
   label: string;
   badge: string;
   imageUrl: string;
+  images: string[];
+  rating: number;
+  reviews: number;
+  specs: Array<{ label: string; value: string }>;
   enabled: boolean;
   sortOrder: number;
 }
@@ -148,6 +153,7 @@ export async function getProducts(): Promise<Product[]> {
   return (data || []).map((p: Record<string, unknown>) => ({
     id: p.id as string,
     name: p.name as string,
+    subtitle: (p.subtitle as string) || '',
     description: p.description as string,
     price: Number(p.price),
     comparePrice: Number(p.compare_price) || 0,
@@ -155,9 +161,44 @@ export async function getProducts(): Promise<Product[]> {
     label: p.label as string,
     badge: p.badge as string,
     imageUrl: p.image_url as string,
+    images: p.images ? (p.images as string[]) : [p.image_url as string],
+    rating: Number(p.rating) || 4.8,
+    reviews: Number(p.reviews) || 0,
+    specs: p.specs ? (p.specs as Array<{ label: string; value: string }>) : [],
     enabled: p.enabled as boolean,
     sortOrder: Number(p.sort_order) || 0,
   }));
+}
+
+export async function getProductById(id: string): Promise<Product | null> {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('mp_products')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error || !data) return null;
+
+  const p = data as Record<string, unknown>;
+  return {
+    id: p.id as string,
+    name: p.name as string,
+    subtitle: (p.subtitle as string) || '',
+    description: p.description as string,
+    price: Number(p.price),
+    comparePrice: Number(p.compare_price) || 0,
+    quantity: Number(p.quantity) || 1,
+    label: p.label as string,
+    badge: p.badge as string,
+    imageUrl: p.image_url as string,
+    images: p.images ? (p.images as string[]) : [p.image_url as string],
+    rating: Number(p.rating) || 4.8,
+    reviews: Number(p.reviews) || 0,
+    specs: p.specs ? (p.specs as Array<{ label: string; value: string }>) : [],
+    enabled: p.enabled as boolean,
+    sortOrder: Number(p.sort_order) || 0,
+  };
 }
 
 // ============ Orders ============
