@@ -1,7 +1,20 @@
 import { getProducts, getSettings } from '@/lib/db';
 import WhatsAppFloat from '@/components/whatsapp-float';
 import TrackingScripts from '@/components/tracking-scripts';
-import { CheckCircle, Star, MessageCircle, Shield, Zap, Leaf, Truck } from 'lucide-react';
+import {
+  CheckCircle,
+  Star,
+  MessageCircle,
+  Shield,
+  Zap,
+  Leaf,
+  Truck,
+  Award,
+  Clock,
+  Users,
+  Globe,
+  ArrowRight,
+} from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,97 +68,172 @@ export default async function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <TrackingScripts />
 
-      {/* Hero */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 border border-amber-200 rounded-full mb-8">
-                <span className="text-amber-700 text-sm font-medium">Japanese Pharmaceutical Grade</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-100 text-amber-700 text-sm font-medium rounded-full mb-6">
+                <Award className="w-3.5 h-3.5" />
+                Japanese Pharmaceutical Grade
               </div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Max<span className="text-amber-600">Plus</span>+
+                <span className="block text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-600 mt-2">
+                  by Kawai Pharmaceutical
+                </span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Premium men&apos;s wellness formula by Kawai Pharmaceutical. Natural herbal extracts for enhanced stamina and confidence.
+              <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-lg">
+                Premium men&apos;s wellness formula. Natural herbal extracts for enhanced stamina, confidence, and intimate performance.
               </p>
-              <div className="flex items-center gap-3 mb-10">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <span className="text-gray-600 text-sm">4.9 (857 reviews)</span>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#packages" className="px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors text-center">
+              <div className="mt-8 flex flex-wrap gap-4">
+                <a
+                  href="#packages"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-amber-600/25 hover:shadow-amber-600/40 hover:-translate-y-0.5"
+                >
                   View Packages
+                  <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-                  <MessageCircle className="w-5 h-5" />
-                  WhatsApp
+                <a
+                  href={`https://wa.me/${whatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition-colors border border-gray-200"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Contact Us
                 </a>
+              </div>
+
+              <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-gray-500">
+                <div className="flex items-center gap-1.5">
+                  <Truck className="w-4 h-4 text-amber-500" />
+                  Free Shipping
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Shield className="w-4 h-4 text-amber-500" />
+                  100% Authentic
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  4.9/5 (857 reviews)
+                </div>
               </div>
             </div>
-            <div className="aspect-square bg-gray-50 rounded-2xl p-16">
-              {product?.imageUrl && <img src={product.imageUrl} alt="MaxPlus+" className="w-full h-full object-contain" />}
+
+            <div className="relative hidden lg:block">
+              <div className="relative w-full aspect-square max-w-lg mx-auto">
+                <div className="absolute inset-8 bg-gradient-to-br from-amber-100 to-orange-50 rounded-full" />
+                {product?.imageUrl && (
+                  <img
+                    src={product.imageUrl}
+                    alt="MaxPlus+ Performance Gel"
+                    className="relative z-10 w-full h-full object-cover rounded-3xl shadow-2xl"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="bg-gray-50 border-y border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-gray-900">Why Choose MaxPlus+?</h2>
+            <p className="mt-3 text-gray-500">Trusted by thousands of men worldwide</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Leaf className="w-5 h-5" />, title: '100% Natural', desc: 'Herbal extracts' },
-              { icon: <Zap className="w-5 h-5" />, title: 'Fast Acting', desc: '60 sec absorption' },
-              { icon: <Shield className="w-5 h-5" />, title: 'Clinically Tested', desc: 'No side effects' },
-              { icon: <Truck className="w-5 h-5" />, title: 'Discreet Shipping', desc: 'Plain packaging' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="text-amber-600">{item.icon}</div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm">{item.title}</div>
-                  <div className="text-xs text-gray-500">{item.desc}</div>
+              { icon: Leaf, title: '100% Natural', desc: 'Premium herbal extracts', color: 'text-green-600', bg: 'bg-green-50' },
+              { icon: Zap, title: 'Fast Acting', desc: 'Absorbs in 60 seconds', color: 'text-amber-600', bg: 'bg-amber-50' },
+              { icon: Shield, title: 'Clinically Tested', desc: 'No side effects', color: 'text-blue-600', bg: 'bg-blue-50' },
+              { icon: Award, title: 'Japanese Quality', desc: 'Pharmaceutical grade', color: 'text-purple-600', bg: 'bg-purple-50' },
+            ].map((feature) => (
+              <div
+                key={feature.title}
+                className="p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all group"
+              >
+                <div className={`w-12 h-12 ${feature.bg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <feature.icon className={`w-6 h-6 ${feature.color}`} />
                 </div>
+                <h3 className="font-semibold text-gray-900">{feature.title}</h3>
+                <p className="mt-2 text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Packages */}
-      <section id="packages" className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Package</h2>
-            <p className="text-lg text-gray-600">Select the plan that fits your needs</p>
+      {/* Stats Section */}
+      <section className="py-16 bg-gradient-to-r from-amber-600 to-orange-500 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { value: '10K+', label: 'Happy Customers' },
+              { value: '50+', label: 'Countries Served' },
+              { value: '4.9/5', label: 'Average Rating' },
+              { value: '100%', label: 'Natural Formula' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-3xl sm:text-4xl font-bold">{stat.value}</div>
+                <div className="mt-1 text-sm text-amber-100">{stat.label}</div>
+              </div>
+            ))}
           </div>
-          <div className="grid lg:grid-cols-3 gap-8">
+        </div>
+      </section>
+
+      {/* Packages Section */}
+      <section id="packages" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-gray-900">Choose Your Package</h2>
+            <p className="mt-3 text-gray-500">Select the plan that fits your needs</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { name: '1 Box', subtitle: 'Starter Pack', price: 49.9, comparePrice: 69.9, badge: null, highlights: ['30-day supply', 'Extend intimate time', 'Free shipping'] },
               { name: '2 Boxes', subtitle: 'Treatment Pack', price: 89.9, comparePrice: 139.8, badge: 'Most Popular', highlights: ['60-day supply', 'Treat performance issues', 'Save $49.90', 'Free shipping'] },
               { name: '3 Boxes', subtitle: 'Premium Pack', price: 119.9, comparePrice: 209.7, badge: 'Best Value', highlights: ['90-day supply', 'Maximum results', 'Save $89.80', 'Free shipping', 'Priority support'] },
-            ].map((pkg, i) => (
-              <div key={i} className={`bg-white rounded-xl ${pkg.badge ? 'border-2 border-amber-500 shadow-xl' : 'border border-gray-200'} p-10 flex flex-col`}>
-                {pkg.badge && <div className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-6 self-start">{pkg.badge}</div>}
+            ].map((pkg) => (
+              <div
+                key={pkg.name}
+                className={`bg-white rounded-2xl ${pkg.badge ? 'border-2 border-amber-500 shadow-xl' : 'border border-gray-200'} p-8 flex flex-col hover:shadow-lg transition-shadow`}
+              >
+                {pkg.badge && (
+                  <div className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-6 self-start">
+                    {pkg.badge}
+                  </div>
+                )}
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{pkg.name}</h3>
-                <p className="text-gray-500 text-sm mb-8">{pkg.subtitle}</p>
+                <p className="text-gray-500 text-sm mb-6">{pkg.subtitle}</p>
                 <div className="flex items-baseline gap-3 mb-8">
                   <span className="text-5xl font-bold text-gray-900">${pkg.price}</span>
                   <span className="text-xl text-gray-400 line-through">${pkg.comparePrice}</span>
                 </div>
-                <ul className="space-y-4 mb-10 flex-1">
-                  {pkg.highlights.map((h, j) => (
-                    <li key={j} className="flex items-start gap-3 text-gray-700">
+                <ul className="space-y-3 mb-8 flex-1">
+                  {pkg.highlights.map((h) => (
+                    <li key={h} className="flex items-start gap-3 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                       <span>{h}</span>
                     </li>
                   ))}
                 </ul>
-                <a href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Order: MaxPlus+ ${pkg.name} - $${pkg.price}`)}`} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Order: MaxPlus+ ${pkg.name} - $${pkg.price}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+                >
                   <MessageCircle className="w-5 h-5" />
                   Order via WhatsApp
                 </a>
@@ -155,43 +243,51 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Ingredients */}
-      <section className="bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Natural Ingredients</h2>
-            <p className="text-lg text-gray-600">Premium herbal extracts</p>
+      {/* Ingredients Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-gray-900">Natural Ingredients</h2>
+            <p className="mt-3 text-gray-500">Premium herbal extracts for optimal results</p>
           </div>
-          <div className="grid lg:grid-cols-3 gap-8">
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { name: 'Epimedium', desc: 'Enhances blood flow and stamina' },
-              { name: 'Cuscuta Seed', desc: 'Supports reproductive health' },
-              { name: 'Goji Berry', desc: 'Rich in antioxidants' },
-            ].map((ing, i) => (
-              <div key={i} className="bg-white rounded-xl p-8 border border-gray-200">
+              { name: 'Epimedium', desc: 'Enhances blood flow and stamina. Traditional herb known for its performance-enhancing properties.' },
+              { name: 'Cuscuta Seed', desc: 'Supports reproductive health and vitality. Rich in antioxidants and essential nutrients.' },
+              { name: 'Goji Berry', desc: 'Powerful antioxidant properties. Boosts energy and overall wellness.' },
+            ].map((ing) => (
+              <div key={ing.name} className="p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all">
+                <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-4">
+                  <Leaf className="w-6 h-6 text-amber-600" />
+                </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-3">{ing.name}</h3>
-                <p className="text-gray-600">{ing.desc}</p>
+                <p className="text-gray-600 leading-relaxed">{ing.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How to Use */}
-      <section className="bg-white">
-        <div className="max-w-5xl mx-auto px-6 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">How to Use</h2>
-            <p className="text-lg text-gray-600">Simple 3-step process</p>
+      {/* How to Use Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-gray-900">How to Use</h2>
+            <p className="mt-3 text-gray-500">Simple 3-step process for best results</p>
           </div>
+
           <div className="grid md:grid-cols-3 gap-12">
             {[
-              { step: '1', title: 'Apply', desc: 'Apply moderate amount to target area' },
-              { step: '2', title: 'Massage', desc: 'Massage for 60 seconds until absorbed' },
-              { step: '3', title: 'Wait', desc: 'No rinsing needed. Works quickly' },
-            ].map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-6">{s.step}</div>
+              { step: '1', icon: <Clock className="w-6 h-6" />, title: 'Apply', desc: 'Apply a moderate amount to the target area' },
+              { step: '2', icon: <Zap className="w-6 h-6" />, title: 'Massage', desc: 'Massage gently for 60 seconds until fully absorbed' },
+              { step: '3', icon: <CheckCircle className="w-6 h-6" />, title: 'Wait', desc: 'No rinsing needed. Works quickly and effectively' },
+            ].map((s) => (
+              <div key={s.step} className="text-center">
+                <div className="w-16 h-16 bg-amber-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-amber-600/25">
+                  {s.icon}
+                </div>
+                <div className="text-sm font-bold text-amber-600 mb-2">STEP {s.step}</div>
                 <h3 className="font-bold text-gray-900 text-lg mb-3">{s.title}</h3>
                 <p className="text-gray-600">{s.desc}</p>
               </div>
@@ -200,35 +296,42 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">FAQ</h2>
-            <p className="text-lg text-gray-600">Common questions</p>
+      {/* FAQ Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+            <p className="mt-3 text-gray-500">Everything you need to know</p>
           </div>
+
           <div className="space-y-6">
             {[
-              { q: 'How does MaxPlus+ work?', a: 'Topical gel that absorbs quickly. Apply and massage for 60 seconds.' },
-              { q: 'Is it safe?', a: 'Yes, 100% natural herbal extracts. No side effects reported.' },
-              { q: 'How long to see results?', a: 'Most users notice results within first use. For best results, use consistently for 30-90 days.' },
-              { q: 'Is shipping discreet?', a: 'Yes, plain unmarked packaging. Your privacy is guaranteed.' },
-            ].map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl p-8 border border-gray-200">
+              { q: 'How does MaxPlus+ work?', a: 'MaxPlus+ is a topical gel that absorbs quickly into the skin. Apply and massage for 60 seconds. The natural herbal formula works within minutes.' },
+              { q: 'Is it safe to use?', a: 'Yes, MaxPlus+ is made from 100% natural herbal extracts. It has been clinically tested with no reported side effects.' },
+              { q: 'How long until I see results?', a: 'Most users notice results within the first use. For best results, use consistently for 30-90 days depending on your package.' },
+              { q: 'Is shipping discreet?', a: 'Yes, all orders are shipped in plain unmarked packaging. Your privacy is 100% guaranteed.' },
+              { q: 'Do you offer a money-back guarantee?', a: 'Yes, we offer a 30-day money-back guarantee. If you\'re not satisfied, contact us for a full refund.' },
+            ].map((faq) => (
+              <div key={faq.q} className="p-8 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors">
                 <h3 className="font-bold text-gray-900 text-lg mb-3">{faq.q}</h3>
-                <p className="text-gray-600">{faq.a}</p>
+                <p className="text-gray-600 leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-amber-600">
-        <div className="max-w-4xl mx-auto px-6 py-20 text-center">
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-amber-600 to-orange-500">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
-          <p className="text-amber-100 text-lg mb-10">Order now via WhatsApp</p>
-          <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-10 py-5 bg-white text-amber-600 font-bold rounded-lg transition-colors">
+          <p className="text-amber-100 text-lg mb-10">Order now via WhatsApp and get free shipping</p>
+          <a
+            href={`https://wa.me/${whatsappNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-10 py-5 bg-white text-amber-600 font-bold rounded-xl transition-colors shadow-lg hover:shadow-xl"
+          >
             <MessageCircle className="w-5 h-5" />
             Order via WhatsApp
           </a>
@@ -237,9 +340,27 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-sm">&copy; 2024 MaxPlus+. All rights reserved.</p>
-          <p className="text-xs text-gray-500 mt-3">These statements have not been evaluated by the FDA.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="text-white font-bold text-lg mb-4">MaxPlus+</h3>
+              <p className="text-sm">Premium Japanese men&apos;s wellness formula by Kawai Pharmaceutical.</p>
+            </div>
+            <div>
+              <h3 className="text-white font-semibold mb-4">Contact</h3>
+              <p className="text-sm">WhatsApp: +{whatsappNumber}</p>
+              <p className="text-sm mt-2">Available 24/7</p>
+            </div>
+            <div>
+              <h3 className="text-white font-semibold mb-4">Shipping</h3>
+              <p className="text-sm">Free worldwide shipping</p>
+              <p className="text-sm mt-2">Discreet packaging</p>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 text-center">
+            <p className="text-sm">&copy; 2024 MaxPlus+. All rights reserved.</p>
+            <p className="text-xs text-gray-500 mt-3">These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+          </div>
         </div>
       </footer>
 
