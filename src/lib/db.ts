@@ -18,6 +18,7 @@ export interface Product {
   name: string;
   subtitle: string;
   description: string;
+  descriptionHtml: string;
   price: number;
   comparePrice: number;
   quantity: number;
@@ -25,6 +26,8 @@ export interface Product {
   badge: string;
   imageUrl: string;
   images: string[];
+  highlights: string[];
+  specifications: Array<{ label: string; value: string }>;
   rating: number;
   reviews: number;
   specs: Array<{ label: string; value: string }>;
